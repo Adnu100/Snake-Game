@@ -5,10 +5,17 @@
 
 #define STARTSPEED 8
 #define BLOCKSIZE 8
+#define SNAKENODE BLOCKSIZE - 2
 #define INITIALX 400
 #define INITIALY 400
 
 typedef enum direction {UP, DOWN, LEFT, RIGHT, ND} direction;
+typedef enum SNAKE_State {
+	SNAKE_FOOD_SMALL,
+	SNAKE_FOOD_LARGE, 
+	SNAKE_COLLISION_WALL, 
+	SNAKE_COLLISION_SNAKE,
+} State;
 
 typedef struct node {
 	int x, y;
@@ -109,7 +116,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s) {
 		SDL_RenderClear(*ren);
 		n = s->tail;
 		while(n != s->head) {
-			AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE, 255, 255, 255, 0);
+			AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 255, 255, 255, 0);
 			switch(n->dir) {
 				case UP:
 					n->y -= STARTSPEED;
@@ -158,9 +165,9 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s) {
 int main() {
 	snake s;
 	initsnake(&s);
-	s.dir = UP;
+	s.dir = ND;
 	addnode(&s);	//first node (mouth of the snake)
-	for(int i = 0; i < 500; i++)
+	for(int i = 0; i < 50; i++)
 		addnode(&s);
 	if(SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Could not Initialize SDL : %s\n", SDL_GetError());
@@ -179,7 +186,6 @@ int main() {
 	}
 	SDL_Event e;
 	int Running = 1;
-	int go = 0;
 	while(Running) {
 		while(SDL_PollEvent(&e)) {
 			switch(e.type) {
@@ -187,7 +193,6 @@ int main() {
 					Running = 0;
 					break;	
 				case SDL_KEYDOWN:
-					go = 1;
 					switch(e.key.keysym.sym) {
 						case SDLK_UP:
 							s.dir = UP;
@@ -207,13 +212,12 @@ int main() {
 				default:
 					break;
 			}
-		}
-		if(go) { 	
+		} 	
 //		UpdateBoardStatus(&s);		//to update board conditions (backend)
 		AD_DrawSnake(&ren, &s);		//to update borad conditions (frontend)			
+		AD_DrawSnake(&ren, &s);
 //		Running = CheckGame(&s);	//checks the collision of snake with walls and with snake
-		printf("X - %d, Y - %d\n", s.head->x, s.head->y);
-		}
+//		printf("(%d, %d), (%d, %d), (%d, %d)", s.head->next->x % 8, s.head->next->y % 8, s.head->next->next->next->x % 8, s.head->next->next->next->y % 8, s.head->next->next->next->next->x % 8, s.head->next->next->next->next->y % 8);					//to check the correct working of the game
 	}
 	SDL_DestroyRenderer(ren);
 	SDL_DestroyWindow(window);
