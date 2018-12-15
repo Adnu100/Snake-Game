@@ -2,180 +2,21 @@
 #include <stdlib.h>
 #include <math.h>
 #include <SDL2/SDL.h>
-
-#define STARTSPEED 8
-#define BLOCKSIZE 8
-#define SNAKENODE BLOCKSIZE - 2
-#define INITIALX 400
-#define INITIALY 400
-
-typedef enum direction {UP, DOWN, LEFT, RIGHT, ND} direction;
-typedef enum SNAKE_State {
-	SNAKE_FOOD_SMALL,
-	SNAKE_FOOD_LARGE, 
-	SNAKE_COLLISION_WALL, 
-	SNAKE_COLLISION_SNAKE,
-} State;
-
-typedef struct node {
-	int x, y;
-	direction dir;
-	struct node *next, *prev;
-} node;
-
-typedef struct snake {
-	int speed, length;
-	direction dir;
-	node *head, *tail;
-} snake;
-
-void initsnake(snake *s);
-void addnode(snake *s);
-void UpdateBoardStatus(snake *s);
-void AD_DrawSnake(SDL_Renderer **ren, snake *s);
-void AD_DrawCircle(SDL_Renderer **ren, float center_x_coordinate, float center_y_coordinate, float radius, int r, int g, int b, int a);
-
-void initsnake(snake *s) {
-	s->head = s->tail = NULL;
-	s->speed = STARTSPEED;
-	s->length = 0;
-	s->dir = ND;
-}
-
-void addnode(snake *s) {
-	s->length++;
-	if(s->head == NULL) {
-		s->head = (node *)malloc(sizeof(node));
-		s->tail = s->head;
-		s->head->dir = s->dir;
-		s->head->x = INITIALX;
-		s->head->y = INITIALY;
-		s->head->next = NULL;					/*******************************/
-		s->head->prev = NULL;					/*     ADNESH'S SNAKE GAME     */
-		return;							/*******************************/
-	}
-	node *n = (node *)malloc(sizeof(node));
-	n->next = NULL;
-	n->prev = NULL;
-	node *tmp = s->head;
-	while(tmp->next) 
-		tmp = tmp->next;
-	tmp->next = n;
-	tmp->next->dir = tmp->dir;
-	switch(tmp->dir) {
-		case UP:
-			tmp->next->x = tmp->x;
-			tmp->next->y = tmp->y + BLOCKSIZE;
-			break;
-		case DOWN:
-			tmp->next->x = tmp->x;
-			tmp->next->y = tmp->y - BLOCKSIZE;
-			break;
-		case RIGHT:
-			tmp->next->x = tmp->x - BLOCKSIZE;
-			tmp->next->y = tmp->y;
-			break;
-		case LEFT:
-			tmp->next->x = tmp->x + BLOCKSIZE;
-			tmp->next->y = tmp->y;
-			break;
-		default:
-			break;				
-	}
-	tmp->next->prev = tmp;
-	s->tail = n;
-}
-
-void MakeBoard(SDL_Renderer **ren) {
-	SDL_SetRenderDrawColor(*ren, 255, 255, 255, 0);
-	int i;
-	for(i = 0; i < BLOCKSIZE; i++) {
-		SDL_RenderDrawLine(*ren, i, 0, i, 800);
-		SDL_RenderDrawLine(*ren, 800 - i, 0, 800 - i, 800);
-		SDL_RenderDrawLine(*ren, 0, i, 800, i);
-		SDL_RenderDrawLine(*ren, 0, 800 - i, 800, 800 - i);
-	}		
-}
-
-void AD_DrawCircle(SDL_Renderer **ren, float center_x_coordinate, float center_y_coordinate, float radius, int r, int g, int b, int a) {
-	SDL_SetRenderDrawColor(*ren, r, g, b, a);
-	int x;
-	float y;
-	for(x = 0; x <= radius; x++) {
-		y = sqrt(radius * radius - (float)(x * x));
-		SDL_RenderDrawLine(*ren, center_x_coordinate + x, center_y_coordinate + y, center_x_coordinate + x, center_y_coordinate - y);
-		SDL_RenderDrawLine(*ren, center_x_coordinate - x, center_y_coordinate + y, center_x_coordinate - x, center_y_coordinate - y);
-	}
-}
-
-void AD_DrawSnake(SDL_Renderer **ren, snake *s) {
-	node *n;
-	int i;
-	for(i = 0; i < BLOCKSIZE / STARTSPEED; i++) {
-		SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0);
-		SDL_RenderClear(*ren);
-		n = s->tail;
-		while(n != s->head) {
-			AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 255, 255, 255, 0);
-			switch(n->dir) {
-				case UP:
-					n->y -= STARTSPEED;
-					break;
-				case DOWN:
-					n->y += STARTSPEED;
-					break;
-				case RIGHT:
-					n->x += STARTSPEED;
-					break;
-				case LEFT:
-					n->x -= STARTSPEED;
-					break;
-				default:
-					break;				
-			}
-			n = n->prev;
-		}
-		n = s->head;
-		AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 255, 0, 0, 0);
-		switch(s->head->dir) {
-			case UP:
-				s->head->y -= STARTSPEED;
-				break;
-			case DOWN:
-				s->head->y += STARTSPEED;
-				break;
-			case RIGHT:
-				s->head->x += STARTSPEED;
-				break;
-			case LEFT:
-				s->head->x -= STARTSPEED;
-				break;
-			default:
-				break;				
-		}
-		MakeBoard(ren);
-		SDL_RenderPresent(*ren);
-		SDL_Delay(1000 / 60);
-	}
-	for(n = s->tail; n != s->head; n = n->prev) 
-		n->dir = n->prev->dir;	
-	s->head->dir = s->dir;	
-}
+#include <SDL2/SDL_ttf.h>
+#include "snake.h"
 
 int main() {
 	snake s;
 	initsnake(&s);
 	s.dir = ND;
 	addnode(&s);	//first node (mouth of the snake)
-	for(int i = 0; i < 50; i++)
-		addnode(&s);
 	if(SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Could not Initialize SDL : %s\n", SDL_GetError());
 		exit(1);
 	}
 	SDL_Window *window;
 	SDL_Renderer *ren;
-	if(!(window = SDL_CreateWindow("Adnesh's Snake Game", 100, 100, 800, 800, SDL_WINDOW_SHOWN))) {
+	if(!(window = SDL_CreateWindow("Adnesh's Snake Game", 100, 100, 800, 950, SDL_WINDOW_SHOWN))) {
 		fprintf(stderr, "Could not Create Window : %s\n", SDL_GetError());
 		exit(2);
 	}
@@ -185,7 +26,9 @@ int main() {
 		exit(3);
 	}
 	SDL_Event e;
-	int Running = 1;
+	long int score = 0;
+	short int Running = 1;
+	struct XY co;
 	while(Running) {
 		while(SDL_PollEvent(&e)) {
 			switch(e.type) {
@@ -193,31 +36,73 @@ int main() {
 					Running = 0;
 					break;	
 				case SDL_KEYDOWN:
+					if(Running == -1) {
+						Running = 0;
+						break;
+					}	
+					if(s.dir == ND) {
+						score = 0;
+						co = RandomBall(&s);
+					}		
 					switch(e.key.keysym.sym) {
 						case SDLK_UP:
-							s.dir = UP;
+							if(s.dir != DOWN)
+								s.dir = UP;
 							break;
 						case SDLK_DOWN:
-							s.dir = DOWN;
+							if(s.dir != UP)
+								s.dir = DOWN;
 							break;
 						case SDLK_RIGHT:
-							s.dir = RIGHT;
+							if(s.dir != LEFT)
+								s.dir = RIGHT;
 							break;
 						case SDLK_LEFT:
-							s.dir = LEFT;
+							if(s.dir != RIGHT)
+								s.dir = LEFT;
 							break;
 						default:
 							break;		
-					}	
+					}
 				default:
-					break;
+					break;		
 			}
+			if(e.type == SDL_KEYDOWN)
+				break;
 		} 	
-//		UpdateBoardStatus(&s);		//to update board conditions (backend)
-		AD_DrawSnake(&ren, &s);		//to update borad conditions (frontend)			
-		AD_DrawSnake(&ren, &s);
-//		Running = CheckGame(&s);	//checks the collision of snake with walls and with snake
-//		printf("(%d, %d), (%d, %d), (%d, %d)", s.head->next->x % 8, s.head->next->y % 8, s.head->next->next->next->x % 8, s.head->next->next->next->y % 8, s.head->next->next->next->next->x % 8, s.head->next->next->next->next->y % 8);					//to check the correct working of the game
+		AD_DrawSnake(&ren, &s, co);		//to update borad conditions (frontend)			
+		AD_DrawSnake(&ren, &s, co);		//callled twice for better animation
+		switch(CheckGame(&s, co)) {
+			case SNAKE_FOOD_SMALL:
+				score += s.speed * 5;
+				for(Running = 0; Running < 10; Running++)
+				addnode(&s);
+				co = RandomBall(&s);
+				break;
+			case SNAKE_FOOD_LARGE:
+				score += s.speed * 25;
+				addnode(&s);
+				addnode(&s);
+				co = RandomBall(&s);
+				break;
+			case SNAKE_COLLISION_WALL:
+				printf("Upps!! The snake collided with the walls!!\n");
+				s.dir = ND;
+				Running = -1;
+				break;
+			case SNAKE_COLLISION_SNAKE:
+				printf("Upps!! The snake collided with itself!!\n");
+				s.dir = ND;
+				Running = -1;
+				break;		 
+			case SNAKE_PROPAGATING:
+				score += s.speed / 2;	
+				break;
+			case SNAKE_HALTED:
+				break;	
+		}				/*checks the collision of snake with walls	*
+						 *and with snake or meals to			*
+						 *snake and takes appropriate action accordingly*/		 
 	}
 	SDL_DestroyRenderer(ren);
 	SDL_DestroyWindow(window);
