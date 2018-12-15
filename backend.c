@@ -89,11 +89,40 @@ State CheckGame(snake *s, struct XY co) {
 		return SNAKE_HALTED;
 	int x = s->head->x;
 	int y = s->head->y;
+	int sx1, sx2, sy1, sy2;
 	node *n = s->head->next;
+	direction d;
 	while(n) {
-		if(n->x == x && n->y == y)
-			return SNAKE_COLLISION_SNAKE;
-		n = n->next;		
+		d = n->dir;
+		sx1 = n->x;
+		sy1 = n->y;
+		while(n->next && n->next->dir != d)
+			n = n->next;
+		switch(d) {
+			case UP:
+				sy2 = n->y;
+				if(x == sx1 && y >= sy1 && y <= sy2)
+					return SNAKE_COLLISION_SNAKE;
+				break;	
+			case DOWN:
+				sy2 = n->y;
+				if(x == sx1 && y >=sy2 && y <= sy1)
+					return SNAKE_COLLISION_SNAKE;
+				break;
+			case RIGHT:
+				sx2 = n->x;
+				if(y == sy1 && x >= sx2 && x <= sx1)
+					return SNAKE_COLLISION_SNAKE;
+				break;
+			case LEFT:
+				sx2 = n->x;
+				if(y == sy1 && x >= sx1 && x <= sx2)
+					return SNAKE_COLLISION_SNAKE;
+				break;
+			default:
+				break;							
+		}
+		n = n->next;	
 	}
 	if((s->head->x == 8 || s->head->x == 792 || s->head->y == 8 || s->head->y == 792))
 		return SNAKE_COLLISION_WALL;
@@ -105,3 +134,4 @@ State CheckGame(snake *s, struct XY co) {
 	}	
 	return SNAKE_PROPAGATING;	
 }
+
