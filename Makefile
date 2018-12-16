@@ -1,5 +1,5 @@
 snake: s.o b.o v.o
-	cc s.o b.o v.o -Wall -o snake -lm -lSDL2
+	cc s.o b.o v.o -Wall -o snake -lm -lSDL2 -lSDL2_ttf
 s.o: snake.h snake.c
 	cc snake.c -c -Wall -o s.o
 v.o: snake.h vis.c

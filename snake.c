@@ -5,6 +5,10 @@
 #include <SDL2/SDL_ttf.h>
 #include "snake.h"
 
+TTF_Font *arial;
+SDL_Rect R1 = {0, 0, 200, 70};
+SDL_Color white = {255, 255, 255};
+
 int main() {
 	snake s;
 	initsnake(&s);
@@ -16,7 +20,7 @@ int main() {
 	}
 	SDL_Window *window;
 	SDL_Renderer *ren;
-	if(!(window = SDL_CreateWindow("Adnesh's Snake Game", 100, 100, 800, 950, SDL_WINDOW_SHOWN))) {
+	if(!(window = SDL_CreateWindow("Adnesh's Snake Game", 100, 100, 800, 800, SDL_WINDOW_SHOWN))) {
 		fprintf(stderr, "Could not Create Window : %s\n", SDL_GetError());
 		exit(2);
 	}
@@ -24,6 +28,15 @@ int main() {
 		SDL_DestroyWindow(window);
 		fprintf(stderr, "could not Create Renderer : %s\n", SDL_GetError());
 		exit(3);
+	}
+	if(TTF_Init()) {
+			fprintf(stderr, "Could not Initiate Fonts : %s\n", TTF_GetError());
+			exit(4);
+	}
+	arial = TTF_OpenFont("font.ttf", 50);
+	if(arial == NULL) {
+		fprintf(stderr, "Could not find the font loader file : %s", TTF_GetError());
+		exit(5);
 	}
 	SDL_Event e;
 	direction saved = ND;
@@ -80,19 +93,19 @@ int main() {
 			if(e.type == SDL_KEYDOWN)
 				break;
 		} 	
-		AD_DrawSnake(&ren, &s, co);		//to update borad conditions (frontend)			
+		AD_DrawSnake(&ren, &s, co, score);		//to update borad conditions (frontend)			
 		SnakeCollisionTest(&s);
-		AD_DrawSnake(&ren, &s, co);		//callled twice for better animation
+		AD_DrawSnake(&ren, &s, co, score);		//callled twice for better animation
 		switch(CheckGame(&s, co)) {
 			case SNAKE_FOOD_SMALL:
-				score += s.speed * 5;
+				score += 10;
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
 				co = RandomBall(&s);
 				break;
 			case SNAKE_FOOD_LARGE:
-				score += s.speed * 25;
+				score += 50;
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
@@ -101,17 +114,17 @@ int main() {
 				co = RandomBall(&s);
 				break;
 			case SNAKE_COLLISION_WALL:
-				printf("Upps!! The snake collided with the walls!!\n");
+				printf("\tUpps!! The snake collided with the walls!!\n");
 				s.dir = ND;
 				Running = -1;
 				break;
 			case SNAKE_COLLISION_SNAKE:
-				printf("Upps!! The snake collided with itself!!\n");
+				printf("\tUpps!! The snake collided with itself!!\n");
 				s.dir = ND;
 				Running = -1;
 				break;
 			case SNAKE_PROPAGATING:
-				score += s.speed / 2;	
+				score++;	
 				break;
 			case SNAKE_HALTED:
 				break;	
@@ -119,8 +132,12 @@ int main() {
 						 *and with snake or meals to			*
 						 *snake and takes appropriate action accordingly*/		 
 	}
+	printf("\tGame Score : %ld\n", score);
+	TTF_CloseFont(arial);
+	TTF_Quit();
 	SDL_DestroyRenderer(ren);
 	SDL_DestroyWindow(window);
+	SDL_Quit();
 	return 0;
 }
 

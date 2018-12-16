@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "snake.h"
 
 void MakeBoard(SDL_Renderer **ren) {
@@ -26,9 +27,20 @@ void AD_DrawCircle(SDL_Renderer **ren, float center_x_coordinate, float center_y
 	}
 }
 
-void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co) {
+extern TTF_Font *arial;
+extern SDL_Rect R1;
+extern SDL_Color white;
+
+void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co, long int score) {
 	if(s->dir == ND)
 		return;
+	SDL_Surface *sur;
+	SDL_Texture *tex_newgame;
+	char scoretext[64];
+	sprintf(scoretext, "score : %16ld", score * 10);
+	sur = TTF_RenderText_Solid(arial, scoretext, white);
+	tex_newgame = SDL_CreateTextureFromSurface(*ren, sur);
+	SDL_FreeSurface(sur);
 	node *n;
 	int i;
 	float multiplier;
@@ -37,6 +49,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co) {
 	for(i = 0; i < BLOCKSIZE / STARTSPEED; i++) {
 		SDL_SetRenderDrawColor(*ren, 0, 100, 0, 200);
 		SDL_RenderClear(*ren);
+		SDL_RenderCopy(*ren, tex_newgame, NULL, &R1);
 		n = s->tail;
 		while(n != s->head) {
 			AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 0, 0, 0, 0);
@@ -135,4 +148,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co) {
 	for(n = s->tail; n != s->head; n = n->prev) 
 		n->dir = n->prev->dir;	
 	s->head->dir = s->dir;	
+	SDL_DestroyTexture(tex_newgame);
 }
+
+
