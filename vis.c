@@ -84,6 +84,54 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co) {
 		SDL_RenderPresent(*ren);
 		SDL_Delay(1000 / 60);
 	}
+	SDL_SetRenderDrawColor(*ren, 0, 100, 0, 200);
+	SDL_RenderClear(*ren);
+	n = s->tail;
+	while(n != s->head) {
+		AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 0, 0, 0, 0);
+		switch(n->dir) {
+			case UP:
+				n->y -= BLOCKSIZE % STARTSPEED;
+				break;
+			case DOWN:
+				n->y += BLOCKSIZE % STARTSPEED;
+				break;
+			case RIGHT:
+				n->x += BLOCKSIZE % STARTSPEED;
+				break;
+			case LEFT:
+				n->x -= BLOCKSIZE % STARTSPEED;
+				break;
+			default:
+				break;				
+		}
+		n = n->prev;
+	}
+	n = s->head;
+	AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 255, 0, 0, 0);
+	switch(s->head->dir) {
+		case UP:
+			s->head->y -= BLOCKSIZE % STARTSPEED;
+			break;
+		case DOWN:
+			s->head->y += BLOCKSIZE % STARTSPEED;
+			break;
+		case RIGHT:
+			s->head->x += BLOCKSIZE % STARTSPEED;
+			break;
+		case LEFT:
+			s->head->x -= BLOCKSIZE % STARTSPEED;
+			break;
+		default:
+			break;				
+	}
+	MakeBoard(ren);
+	if(co.t == SMALL)
+		AD_DrawCircle(ren, co.x, co.y, BLOCKSIZE, 255, 255, 0, 0);
+	if(co.t == BIG) 
+		AD_DrawCircle(ren, co.x, co.y, BLOCKSIZE * multiplier, Random(0, 255), Random(0, 255), Random(0, 255), 0);
+	SDL_RenderPresent(*ren);
+	SDL_Delay(1000 / 60);
 	for(n = s->tail; n != s->head; n = n->prev) 
 		n->dir = n->prev->dir;	
 	s->head->dir = s->dir;	

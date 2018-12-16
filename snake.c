@@ -81,16 +81,21 @@ int main() {
 				break;
 		} 	
 		AD_DrawSnake(&ren, &s, co);		//to update borad conditions (frontend)			
+		SnakeCollisionTest(&s);
 		AD_DrawSnake(&ren, &s, co);		//callled twice for better animation
 		switch(CheckGame(&s, co)) {
 			case SNAKE_FOOD_SMALL:
 				score += s.speed * 5;
-				for(Running = 0; Running < 10; Running++)
+				addnode(&s);
+				addnode(&s);
 				addnode(&s);
 				co = RandomBall(&s);
 				break;
 			case SNAKE_FOOD_LARGE:
 				score += s.speed * 25;
+				addnode(&s);
+				addnode(&s);
+				addnode(&s);
 				addnode(&s);
 				addnode(&s);
 				co = RandomBall(&s);
@@ -104,7 +109,7 @@ int main() {
 				printf("Upps!! The snake collided with itself!!\n");
 				s.dir = ND;
 				Running = -1;
-				break;		 
+				break;
 			case SNAKE_PROPAGATING:
 				score += s.speed / 2;	
 				break;

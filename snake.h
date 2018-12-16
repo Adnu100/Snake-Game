@@ -1,9 +1,9 @@
-#define STARTSPEED 8
+#define STARTSPEED 100
 #define BLOCKSIZE 8
 #define SNAKENODE BLOCKSIZE - 2
 #define INITIALX 400
 #define INITIALY 400
-#define BIG_FOOD_PROBABILITY 5
+#define BIG_FOOD_PROBABILITY 7
 
 typedef enum direction {UP, DOWN, LEFT, RIGHT, ND} direction;	//directions
 typedef enum SNAKE_State {
@@ -42,3 +42,4 @@ void AD_DrawCircle(SDL_Renderer **ren, float center_x_coordinate, float center_y
 int Random(int Range_Start, int Range_End);
 struct XY RandomBall(snake *s);
 State CheckGame(snake *s, struct XY co);
+void SnakeCollisionTest(snake *s);

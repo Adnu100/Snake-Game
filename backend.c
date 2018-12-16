@@ -68,7 +68,6 @@ struct XY RandomBall(snake *s) {
 		y = Random(2, 800 / (2 * BLOCKSIZE) - 1);
 		x *= (BLOCKSIZE * 2);
 		y *= (BLOCKSIZE * 2);
-		y -= BLOCKSIZE;
 		while(n) {
 			if(n->x == x && n->y == y)
 				break;
@@ -84,18 +83,40 @@ struct XY RandomBall(snake *s) {
 	return ret;
 }
 
+int collision = 0;
+
 State CheckGame(snake *s, struct XY co) {
 	if(s->dir == ND)
 		return SNAKE_HALTED;
-	// SNAKE_COLLISION_SNAKE yet to be handled
+	if(collision == 1)
+		return SNAKE_COLLISION_SNAKE;
 	if((s->head->x <= 8 || s->head->x >= 792 || s->head->y <= 8 || s->head->y >= 792))
 		return SNAKE_COLLISION_WALL;
-	if(s->head->x == co.x && s->head->y == co.y) {
+	if((s->head->x == co.x && s->head->y == co.y - BLOCKSIZE) || (s->head->x == co.x - BLOCKSIZE && s->head->y == co.y)) {
 		if(co.t == SMALL)
 			return SNAKE_FOOD_SMALL;
 		else 
 			return SNAKE_FOOD_LARGE;		
 	}	
 	return SNAKE_PROPAGATING;	
+}
+
+void SnakeCollisionTest(snake *s) {
+	static int i = 1;
+	if(i) {
+		node *n = s->head->next;
+		if(n) {
+			n = n->next;
+			int x = s->head->x, y = s->head->y;
+			while(n) {
+				if(n->x == x && n->y == y) {
+					i = 0;
+					collision = 1;
+					return;
+				}	
+				n = n->next;
+			}
+		}
+	}	
 }
 
