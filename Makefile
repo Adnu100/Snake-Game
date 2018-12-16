@@ -1,8 +1,8 @@
-snake: snake.o backend.o vis.o
-	cc snake.o backend.o vis.o -Wall -o snake -lm -lSDL2
-snake.o: snake.h snake.c
-	cc snake.c -c -Wall
-vis.o: snake.h vis.c 
-	cc vis.c -c -Wall
-backend.o: snake.h backend.c
-	cc backend.c -c -Wall
+snake: s.o b.o v.o
+	cc s.o b.o v.o -Wall -o snake -lm -lSDL2
+s.o: snake.h snake.c
+	cc snake.c -c -Wall -o s.o
+v.o: snake.h vis.c
+	cc vis.c -c -Wall -o v.o
+b.o: snake.h backend.c
+	cc backend.c -c -Wall -o b.o

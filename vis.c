@@ -35,11 +35,11 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co) {
 	int sel = Random(10, 20);
 	multiplier = sel / 10;
 	for(i = 0; i < BLOCKSIZE / STARTSPEED; i++) {
-		SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0);
+		SDL_SetRenderDrawColor(*ren, 0, 100, 0, 200);
 		SDL_RenderClear(*ren);
 		n = s->tail;
 		while(n != s->head) {
-			AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 255, 255, 255, 0);
+			AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 0, 0, 0, 0);
 			switch(n->dir) {
 				case UP:
 					n->y -= s->speed;
