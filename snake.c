@@ -6,7 +6,7 @@
 #include "snake.h"
 
 TTF_Font *arial;
-SDL_Rect R1 = {0, 0, 200, 70};
+SDL_Rect R1 = {10, 2, 200, 70};
 SDL_Color white = {255, 255, 255};
 
 int main() {
@@ -132,7 +132,7 @@ int main() {
 						 *and with snake or meals to			*
 						 *snake and takes appropriate action accordingly*/		 
 	}
-	printf("\tGame Score : %ld\n", score);
+	printf("\tGame Score : %ld\n", score * 10);
 	TTF_CloseFont(arial);
 	TTF_Quit();
 	SDL_DestroyRenderer(ren);
