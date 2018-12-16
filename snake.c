@@ -26,6 +26,7 @@ int main() {
 		exit(3);
 	}
 	SDL_Event e;
+	direction saved = ND;
 	long int score = 0;
 	short int Running = 1;
 	struct XY co;
@@ -36,11 +37,11 @@ int main() {
 					Running = 0;
 					break;	
 				case SDL_KEYDOWN:
-					if(Running == -1) {
+    					if(Running == -1) {
 						Running = 0;
 						break;
 					}	
-					if(s.dir == ND) {
+					if(s.dir == ND && saved == ND) {
 						score = 0;
 						co = RandomBall(&s);
 					}		
@@ -61,6 +62,15 @@ int main() {
 							if(s.dir != RIGHT)
 								s.dir = LEFT;
 							break;
+						case SDLK_SPACE: case SDLK_KP_ENTER: case SDLK_p: case SDLK_RETURN:
+							if(s.dir == ND) {
+								s.dir = saved;
+								saved = ND;
+							}	
+							else {
+								saved = s.dir;
+								s.dir = ND;
+							}
 						default:
 							break;		
 					}
