@@ -1,4 +1,4 @@
-#define STARTSPEED 100
+#define STARTSPEED 8
 #define BLOCKSIZE 8
 #define SNAKENODE BLOCKSIZE - 2
 #define INITIALX 400
