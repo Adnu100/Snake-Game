@@ -60,20 +60,28 @@ int main() {
 					}		
 					switch(e.key.keysym.sym) {
 						case SDLK_UP:
-							if(s.dir != DOWN)
+							if(s.dir != DOWN && saved != DOWN) {
 								s.dir = UP;
+								saved = ND;
+							}	
 							break;
 						case SDLK_DOWN:
-							if(s.dir != UP)
+							if(s.dir != UP && saved != UP) {
 								s.dir = DOWN;
+								saved = ND;
+							}	
 							break;
 						case SDLK_RIGHT:
-							if(s.dir != LEFT)
+							if(s.dir != LEFT && saved != LEFT) {
 								s.dir = RIGHT;
+								saved = ND;
+							}	
 							break;
 						case SDLK_LEFT:
-							if(s.dir != RIGHT)
+							if(s.dir != RIGHT && saved != RIGHT) {
 								s.dir = LEFT;
+								saved = ND;
+							}	
 							break;
 						case SDLK_SPACE: case SDLK_KP_ENTER: case SDLK_p: case SDLK_RETURN:
 							if(s.dir == ND) {
@@ -98,14 +106,30 @@ int main() {
 		AD_DrawSnake(&ren, &s, co, score);		//callled twice for better animation
 		switch(CheckGame(&s, co)) {
 			case SNAKE_FOOD_SMALL:
-				score += 10;
+				if(score >= LV4 && Running == 4) {
+					s.speed *= 2;
+					Running = 5;
+				}
+				else if(score >= LV3 && Running == 3) {
+					s.speed *= 2;
+					Running = 4;	
+				}
+				else if(score >= LV2 && Running == 2) {
+					s.speed *= 2;	
+					Running = 3;
+				}
+				else if(score >= LV1 && Running == 1) {
+					s.speed *= 2;
+					Running = 2;
+				}	
+				score += (s.speed * 5);
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
 				co = RandomBall(&s);
 				break;
 			case SNAKE_FOOD_LARGE:
-				score += 50;
+				score += (s.speed * 25);
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
@@ -124,7 +148,7 @@ int main() {
 				Running = -1;
 				break;
 			case SNAKE_PROPAGATING:
-				score++;	
+				score += (s.speed * 0.5);	
 				break;
 			case SNAKE_HALTED:
 				break;	

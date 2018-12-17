@@ -1,9 +1,13 @@
-#define STARTSPEED 8
+#define STARTSPEED 2
 #define BLOCKSIZE 8
 #define SNAKENODE BLOCKSIZE - 2
 #define INITIALX 400
 #define INITIALY 400
 #define BIG_FOOD_PROBABILITY 7
+#define LV1 250
+#define LV2 1000
+#define LV3 7000
+#define LV4 20000
 
 typedef enum direction {UP, DOWN, LEFT, RIGHT, ND} direction;	//directions
 typedef enum SNAKE_State {

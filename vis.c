@@ -6,14 +6,22 @@
 #include "snake.h"
 
 void MakeBoard(SDL_Renderer **ren) {
-	SDL_SetRenderDrawColor(*ren, 255, 255, 255, 0);
 	int i;
-	for(i = 0; i < BLOCKSIZE; i++) {
+	int b = BLOCKSIZE * 1.5;
+	SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0);		
+	for(i = BLOCKSIZE / 2; i < b; i++) {
 		SDL_RenderDrawLine(*ren, i, 0, i, 800);
 		SDL_RenderDrawLine(*ren, 800 - i, 0, 800 - i, 800);
 		SDL_RenderDrawLine(*ren, 0, i, 800, i);
 		SDL_RenderDrawLine(*ren, 0, 800 - i, 800, 800 - i);
-	}		
+	}
+	SDL_SetRenderDrawColor(*ren, 255, 255, 255, 0);
+	for(i = 0; i < BLOCKSIZE / 2; i++) {
+		SDL_RenderDrawLine(*ren, i, 0, i, 800);
+		SDL_RenderDrawLine(*ren, 800 - i, 0, 800 - i, 800);
+		SDL_RenderDrawLine(*ren, 0, i, 800, i);
+		SDL_RenderDrawLine(*ren, 0, 800 - i, 800, 800 - i);
+	}
 }
 
 void AD_DrawCircle(SDL_Renderer **ren, float center_x_coordinate, float center_y_coordinate, float radius, int r, int g, int b, int a) {
@@ -46,7 +54,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co, long int score) {
 	float multiplier;
 	int sel = Random(10, 20);
 	multiplier = sel / 10;
-	for(i = 0; i < BLOCKSIZE / STARTSPEED; i++) {
+	for(i = 0; i < BLOCKSIZE / s->speed; i++) {
 		SDL_SetRenderDrawColor(*ren, 0, 100, 0, 200);
 		SDL_RenderClear(*ren);
 		SDL_RenderCopy(*ren, tex_newgame, NULL, &R1);
@@ -99,21 +107,22 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co, long int score) {
 	}
 	SDL_SetRenderDrawColor(*ren, 0, 100, 0, 200);
 	SDL_RenderClear(*ren);
+	SDL_RenderCopy(*ren, tex_newgame, NULL, &R1);
 	n = s->tail;
 	while(n != s->head) {
 		AD_DrawCircle(ren, n->x, n->y, SNAKENODE, 0, 0, 0, 0);
 		switch(n->dir) {
 			case UP:
-				n->y -= BLOCKSIZE % STARTSPEED;
+				n->y -= BLOCKSIZE % s->speed;
 				break;
 			case DOWN:
-				n->y += BLOCKSIZE % STARTSPEED;
+				n->y += BLOCKSIZE % s->speed;
 				break;
 			case RIGHT:
-				n->x += BLOCKSIZE % STARTSPEED;
+				n->x += BLOCKSIZE % s->speed;
 				break;
 			case LEFT:
-				n->x -= BLOCKSIZE % STARTSPEED;
+				n->x -= BLOCKSIZE % s->speed;
 				break;
 			default:
 				break;				
@@ -124,16 +133,16 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co, long int score) {
 	AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 255, 0, 0, 0);
 	switch(s->head->dir) {
 		case UP:
-			s->head->y -= BLOCKSIZE % STARTSPEED;
+			s->head->y -= BLOCKSIZE % s->speed;
 			break;
 		case DOWN:
-			s->head->y += BLOCKSIZE % STARTSPEED;
+			s->head->y += BLOCKSIZE % s->speed;
 			break;
 		case RIGHT:
-			s->head->x += BLOCKSIZE % STARTSPEED;
+			s->head->x += BLOCKSIZE % s->speed;
 			break;
 		case LEFT:
-			s->head->x -= BLOCKSIZE % STARTSPEED;
+			s->head->x -= BLOCKSIZE % s->speed;
 			break;
 		default:
 			break;				
