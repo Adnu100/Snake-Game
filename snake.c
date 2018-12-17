@@ -10,6 +10,51 @@ SDL_Rect R1 = {10, 2, 200, 70};
 SDL_Color white = {255, 255, 255};
 
 int main() {
+	int opt, opt_index, stage = 1;
+	const struct option optarr[] = {
+		{"help", no_argument, NULL, 'h'},
+		{"reset", no_argument, NULL, 'r'}, 
+		{"max-speed", no_argument, NULL, 'm'}, 
+		{"controls", no_arguments, NULL, 'c'},
+		{"stage", required_argument, NULL, 's'},
+		{NULL, 0, NULL, 0}
+	};
+	while((opt = getopt_long(argc, argv, "s:hHrmct", optarr, &opt_index)) != -1) {
+		switch(opt) {
+			case 's':
+				stage = atoi(optarg);
+				break;
+			case 'h':
+				Display_help();
+				return 0;
+				break;
+			case 'H':
+				//show the highscore
+				return 0;
+				break;	
+			case 'r':
+				//reset the highscore;
+				return 0;
+				break;
+			case 'm':
+				s.speed = 100;
+				Running = 100;
+				break;	
+			case 'c':
+				Display_controls();
+				return 0;
+				break;
+			case 's':
+				tflag = 1;
+				initsnake(&t);
+				addnode(&t);
+				break;
+			case '?':
+				printf("Type %s --help | %s -h for help\n", argv[0], argv[0]);
+				exit(7);
+				break;			
+		}		
+	}	
 	snake s;
 	initsnake(&s);
 	addnode(&s);	//first node (mouth of the snake)

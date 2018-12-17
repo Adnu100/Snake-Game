@@ -22,6 +22,7 @@ Mandatory arguments to long options are mandatory for short options too
   -m --max-speed	start snake with max speed
   -r --reset		reset the highscore
   -c --controls		display the controls and exit
+  -H 			display the highscore and exit
   -h --help 		display help and exit
   
 Exit Status:
