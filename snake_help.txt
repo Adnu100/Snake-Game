@@ -1,0 +1,37 @@
+Snake Game:
+Created y - Adnesh Anil Dhamangaonkar
+
+Snake game in which main objective is to collect bonuses appeared
+on the screen by the snake and score highest. As the snake picks 
+up the bonuses, its length will increase and and so the score. 
+The speed of the snake will increase as you advance in the game.
+
+Controls:
+	1) Arrow keys - changing the direction of snake
+	2) p OR Space OR Enter - Game pausing or resuming
+	3) n - To start a new game
+	4) q - quit
+	
+Usage: ./snake [options]
+
+Mandatory arguments to long options are mandatory for short options too
+  -s --stage NUM	start on the NUM stage (NUM can be any value
+  			between 1 to 5, higher number will set the stage 
+  			to 5)
+  -t			two players mode
+  -m --max-speed	start snake with max speed
+  -r --reset		reset the highscore
+  -c --controls		display the controls and exit
+  -h --help 		display help and exit
+  
+Exit Status:
+ 0 if OK,
+ 1 if SDL initialization fails, 
+ 2 if could not create window,
+ 3 if could not create renderer, 
+ 4 if TTF initialization fails,
+ 5 if font (.ttf) file is missing (or unable to open)
+ 6 if not enough RAM for the game
+ 7 if invalid options are provided in command line
+ 
+Highscore until now - 0

@@ -28,6 +28,10 @@ void addnode(snake *s) {
 		return;							/*******************************/
 	}
 	node *n = (node *)malloc(sizeof(node));
+	if(n == NULL) {
+		fprintf(stderr, "Not enough RAM!\n");
+		exit(6);
+	}	
 	n->next = NULL;
 	n->prev = NULL;
 	node *tmp = s->head;
