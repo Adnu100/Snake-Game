@@ -12,7 +12,6 @@ SDL_Color white = {255, 255, 255};
 int main() {
 	snake s;
 	initsnake(&s);
-	s.dir = ND;
 	addnode(&s);	//first node (mouth of the snake)
 	if(SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Could not Initialize SDL : %s\n", SDL_GetError());
@@ -42,6 +41,7 @@ int main() {
 	direction saved = ND;
 	long int score = 0;
 	short int Running = 1;
+	int num = 1;
 	struct XY co;
 	while(Running) {
 		while(SDL_PollEvent(&e)) {
@@ -50,7 +50,7 @@ int main() {
 					Running = 0;
 					break;	
 				case SDL_KEYDOWN:
-    					if(Running == -1) {
+    					if(Running == -1 && e.key.keysym.sym != SDLK_n) {
 						Running = 0;
 						break;
 					}	
@@ -92,6 +92,15 @@ int main() {
 								saved = s.dir;
 								s.dir = ND;
 							}
+						case SDLK_n:
+							printf("\tGame %d score : %ld\n", num, score);
+							num++;
+							Running = 1;
+							score = 0;
+							DestroySnake(&s);
+							initsnake(&s);
+							addnode(&s);
+							break;	
 						default:
 							break;		
 					}
@@ -156,7 +165,7 @@ int main() {
 						 *and with snake or meals to			*
 						 *snake and takes appropriate action accordingly*/		 
 	}
-	printf("\tGame Score : %ld\n", score * 10);
+	num == 1 ? printf("\tGame score : %ld\n", score) : printf("\tGame %d score : %ld\n", num, score);	
 	TTF_CloseFont(arial);
 	TTF_Quit();
 	SDL_DestroyRenderer(ren);

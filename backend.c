@@ -101,6 +101,20 @@ State CheckGame(snake *s, struct XY co) {
 	return SNAKE_PROPAGATING;	
 }
 
+void DestroyAllNodes(node *n); //just like a private function. need not to be displayed in the header
+ 
+void DestroySnake(snake *s) {
+	node *n = s->head;
+	DestroyAllNodes(n);
+}
+
+void DestroyAllNodes(node *n) {
+	if(n == NULL)
+		return;
+	DestroyAllNodes(n->next);
+	free(n);	
+}
+
 void SnakeCollisionTest(snake *s) {
 	static int i = 1;
 	if(i) {

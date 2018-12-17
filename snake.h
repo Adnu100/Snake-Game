@@ -47,3 +47,4 @@ int Random(int Range_Start, int Range_End);
 struct XY RandomBall(snake *s);
 State CheckGame(snake *s, struct XY co);
 void SnakeCollisionTest(snake *s);
+void DestroySnake(snake *s);
