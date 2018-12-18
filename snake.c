@@ -211,7 +211,7 @@ int main() {
 						 *and with snake or meals to			*
 						 *snake and takes appropriate action accordingly*/		 
 	}
-	num == 1 ? printf("\tGame score : %ld\n", score) : printf("\tGame %d score : %ld\n", num, score);	
+	num == 1 ? printf("\tGame score : %ld\n", score * 10) : printf("\tGame %d score : %ld\n", num, score * 10);	
 	TTF_CloseFont(arial);
 	TTF_Quit();
 	SDL_DestroyRenderer(ren);
