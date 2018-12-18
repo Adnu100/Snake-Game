@@ -92,6 +92,7 @@ int main() {
 								saved = s.dir;
 								s.dir = ND;
 							}
+							break;
 						case SDLK_n:
 							printf("\tGame %d score : %ld\n", num, score);
 							num++;
