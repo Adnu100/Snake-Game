@@ -24,29 +24,42 @@ void Display_help(void) {
 }
 
 void Display_highscore(void) {
-	int fd, i = 0;
-	char b;
-	fd = open("snake_help.txt", O_RDONLY);
+	int fd;
+	long int sscore = 0, tscore = 0;
+	fd = open(".snake", O_RDONLY);
+	if(fd == -1) {
+		printf("\tHighscore (single player): %ld\n\tHighscore (double player): %ld\n", sscore, tscore);
+		return;
+	}
+	read(fd, &sscore, sizeof(long int));
+	read(fd, &tscore, sizeof(long int));
+	printf("\tHighscore (single player): %ld\n\tHighscore (double player): %ld\n", sscore, tscore);
+}
+
+long int UpdateHighscore(long int score, int tflag) {
+	int fd;
+	long int sscore, tscore, retscore;
+	fd = open(".snake", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 	if(fd == -1) {
 		fprintf(stderr, "Could not find help.txt\n");
-		return;
-	}	
-	while(read(fd, &b, sizeof(char))) {
-		if(i == 3)
-			break;
-		if(b == '>')
-			i++;
-		if(i == 2) {
-			if(b == '-')
-				i++;	
+		return -1;
+	}
+	read(fd, &sscore, sizeof(long int));
+	read(fd, &tscore, sizeof(long int));
+	lseek(fd, SEEK_SET, 0);
+	if(tflag) {
+		retscore = tscore;
+		if(score > retscore)
+			write(fd, &score, sizeof(long int));
+	}		
+	else { 	
+		retscore = sscore;	
+		if(score > retscore) {
+			lseek(fd, SEEK_SET, sizeof(long int));
+			write(fd, &score, sizeof(long int));
 		}
 	}	
-	printf("Highscore : ");	
-	do {
-		read(fd, &b, sizeof(char));
-		printf("%c", b);
-	} while(b >= '0' && b <= '9');
-	close(fd);
+	return (score > retscore ? score : retscore);
 }
 
 void Display_controls(void) {
@@ -63,6 +76,17 @@ void Display_controls(void) {
 		read(fd, &b, sizeof(char));
 		printf("%c", b);
 	}	
+	close(fd);
+}
+
+void Reset_highscore(void) {
+	int fd;
+	fd = open(".snake", O_WRONLY);
+	if(fd == -1)
+		return;
+	long int i = 0;
+	write(fd, &i, sizeof(long int));
+	write(fd, &i, sizeof(long int));
 	close(fd);
 }
 

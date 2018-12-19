@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
 		switch(opt) {
 			case 's':
 				stage = atoi(optarg);
+				//stages will be done after 2 players
 				break;
 			case 'h':
 				Display_help();
@@ -39,20 +40,20 @@ int main(int argc, char *argv[]) {
 				return 0;
 				break;	
 			case 'r':
-				//reset the highscore;
+				Reset_highscore();
 				return 0;
 				break;
 			case 'm':
-				s.speed = 100;
-				Running = 100;
-				if(t.head != NULL)
-					t.speed = 100;	
+				s.speed = STARTSPEED * 16;
+				t.speed = STARTSPEED * 16;
+				Running = 5;
 				break;	
 			case 'c':
 				Display_controls();
 				return 0;
 				break;
 			case 't':
+				//yet to be done
 				tflag = 1;
 				addnode(&t);
 				break;
@@ -83,7 +84,7 @@ int main(int argc, char *argv[]) {
 	}
 	arial = TTF_OpenFont("font.ttf", 50);
 	if(arial == NULL) {
-		fprintf(stderr, "Could not find the font loader file : %s", TTF_GetError());
+		fprintf(stderr, "Could not find the font loader file : %s\n", TTF_GetError());
 		exit(5);
 	}
 	SDL_Event e;
@@ -143,6 +144,7 @@ int main(int argc, char *argv[]) {
 							break;
 						case SDLK_n:
 							printf("\tGame %d score : %ld\n", num, score);
+							UpdateHighscore(score, tflag);
 							num++;
 							Running = 1;
 							score = 0;
@@ -214,7 +216,9 @@ int main(int argc, char *argv[]) {
 						 *and with snake or meals to			*
 						 *snake and takes appropriate action accordingly*/		 
 	}
+	UpdateHighscore(score * 10, tflag);
 	num == 1 ? printf("\tGame score : %ld\n", score * 10) : printf("\tGame %d score : %ld\n", num, score * 10);	
+	Display_highscore();
 	TTF_CloseFont(arial);
 	TTF_Quit();
 	SDL_DestroyRenderer(ren);

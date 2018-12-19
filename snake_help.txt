@@ -35,6 +35,3 @@ Exit Status:
  5 if font (.ttf) file is missing (or unable to open)
  6 if not enough RAM for the game
  7 if invalid options are provided in command line
- 
->Highscore until now - 0
-

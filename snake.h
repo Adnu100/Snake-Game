@@ -51,3 +51,5 @@ void DestroySnake(snake *s);
 void Display_help(void);
 void Display_highscore(void);
 void Display_controls(void);
+long int UpdateHighscore(long int score, int tflag);
+void Reset_highscore(void);
