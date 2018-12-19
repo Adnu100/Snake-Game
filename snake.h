@@ -48,3 +48,6 @@ struct XY RandomBall(snake *s);
 State CheckGame(snake *s, struct XY co);
 void SnakeCollisionTest(snake *s);
 void DestroySnake(snake *s);
+void Display_help(void);
+void Display_highscore(void);
+void Display_controls(void);

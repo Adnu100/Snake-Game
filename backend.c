@@ -2,8 +2,69 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <SDL2/SDL.h>
 #include "snake.h"
+
+void Display_help(void) {
+	int fd;
+	char b;
+	fd = open("snake_help.txt", O_RDONLY);
+	if(fd == -1) {
+		fprintf(stderr, "Could not find help.txt\n");
+		return;
+	}	
+	while(read(fd, &b, sizeof(char)))
+		if(b != '>' && b != '<')
+			printf("%c", b);
+	close(fd);
+}
+
+void Display_highscore(void) {
+	int fd, i = 0;
+	char b;
+	fd = open("snake_help.txt", O_RDONLY);
+	if(fd == -1) {
+		fprintf(stderr, "Could not find help.txt\n");
+		return;
+	}	
+	while(read(fd, &b, sizeof(char))) {
+		if(i == 3)
+			break;
+		if(b == '>')
+			i++;
+		if(i == 2) {
+			if(b == '-')
+				i++;	
+		}
+	}	
+	printf("Highscore : ");	
+	do {
+		read(fd, &b, sizeof(char));
+		printf("%c", b);
+	} while(b >= '0' && b <= '9');
+	close(fd);
+}
+
+void Display_controls(void) {
+	int fd;
+	char b;
+	fd = open("snake_help.txt", O_RDONLY);
+	if(fd == -1) {
+		fprintf(stderr, "Could not find help.txt\n");
+		return;
+	}
+	while(b != '>')
+		read(fd, &b, sizeof(char));
+	while(b != '<') {
+		read(fd, &b, sizeof(char));
+		printf("%c", b);
+	}	
+	close(fd);
+}
 
 int Random(int Range_Start, int Range_End) {
 	srand((unsigned int)(time(NULL) + rand() + rand()));

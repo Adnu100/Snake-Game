@@ -6,11 +6,12 @@ on the screen by the snake and score highest. As the snake picks
 up the bonuses, its length will increase and and so the score. 
 The speed of the snake will increase as you advance in the game.
 
-Controls:
+>Controls:
 	1) Arrow keys - changing the direction of snake
 	2) p OR Space OR Enter - Game pausing or resuming
 	3) n - To start a new game
 	4) q - quit
+<	 
 	
 Usage: ./snake [options]
 
@@ -35,4 +36,5 @@ Exit Status:
  6 if not enough RAM for the game
  7 if invalid options are provided in command line
  
-Highscore until now - 0
+>Highscore until now - 0
+

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <getopt.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "snake.h"
@@ -9,13 +10,18 @@ TTF_Font *arial;
 SDL_Rect R1 = {10, 2, 200, 70};
 SDL_Color white = {255, 255, 255};
 
-int main() {
-	int opt, opt_index, stage = 1;
+int main(int argc, char *argv[]) {	
+	snake s, t;
+	initsnake(&s);
+	addnode(&s);	//first node (mouth of the snake)
+	initsnake(&t);
+	short int Running = 1;
+	int opt, opt_index, stage = 1, tflag = 0;
 	const struct option optarr[] = {
 		{"help", no_argument, NULL, 'h'},
 		{"reset", no_argument, NULL, 'r'}, 
 		{"max-speed", no_argument, NULL, 'm'}, 
-		{"controls", no_arguments, NULL, 'c'},
+		{"controls", no_argument, NULL, 'c'},
 		{"stage", required_argument, NULL, 's'},
 		{NULL, 0, NULL, 0}
 	};
@@ -29,7 +35,7 @@ int main() {
 				return 0;
 				break;
 			case 'H':
-				//show the highscore
+				Display_highscore();
 				return 0;
 				break;	
 			case 'r':
@@ -39,14 +45,15 @@ int main() {
 			case 'm':
 				s.speed = 100;
 				Running = 100;
+				if(t.head != NULL)
+					t.speed = 100;	
 				break;	
 			case 'c':
 				Display_controls();
 				return 0;
 				break;
-			case 's':
+			case 't':
 				tflag = 1;
-				initsnake(&t);
 				addnode(&t);
 				break;
 			case '?':
@@ -54,10 +61,7 @@ int main() {
 				exit(7);
 				break;			
 		}		
-	}	
-	snake s;
-	initsnake(&s);
-	addnode(&s);	//first node (mouth of the snake)
+	}
 	if(SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Could not Initialize SDL : %s\n", SDL_GetError());
 		exit(1);
@@ -85,7 +89,6 @@ int main() {
 	SDL_Event e;
 	direction saved = ND;
 	long int score = 0;
-	short int Running = 1;
 	int num = 1;
 	struct XY co;
 	while(Running) {
