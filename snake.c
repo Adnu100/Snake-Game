@@ -56,6 +56,10 @@ int main(int argc, char *argv[]) {
 				//yet to be done
 				tflag = 1;
 				addnode(&t);
+				s.head->x = INITIALX_TWOPLAYER_SNAKE_s;
+				s.head->y = INITIALY_TWOPLAYER_SNAKE_s;
+				t.head->x = INITIALX_TWOPLAYER_SNAKE_t;
+				t.head->y = INITIALY_TWOPLAYER_SNAKE_t;
 				break;
 			case '?':
 				printf("Type %s --help | %s -h for help\n", argv[0], argv[0]);
@@ -88,7 +92,7 @@ int main(int argc, char *argv[]) {
 		exit(5);
 	}
 	SDL_Event e;
-	direction saved = ND;
+	direction saved = ND, saved_t = ND;
 	long int score = 0;
 	int num = 1;
 	struct XY co;
@@ -132,13 +136,41 @@ int main(int argc, char *argv[]) {
 								saved = ND;
 							}	
 							break;
+						case SDLK_w:
+							if(t.dir != DOWN && saved_t != DOWN) {
+								t.dir = UP;
+								saved_t = ND;
+							}	
+							break;
+						case SDLK_s:
+							if(t.dir != UP && saved_t != UP) {
+								t.dir = DOWN;
+								saved_t = ND;
+							}	
+							break;
+						case SDLK_d:
+							if(t.dir != LEFT && saved_t != LEFT) {
+								t.dir = RIGHT;
+								saved_t = ND;
+							}	
+							break;
+						case SDLK_a:
+							if(t.dir != RIGHT && saved_t != RIGHT) {
+								t.dir = LEFT;
+								saved_t = ND;
+							}	
+							break;	
 						case SDLK_SPACE: case SDLK_KP_ENTER: case SDLK_p: case SDLK_RETURN:
 							if(s.dir == ND) {
+								t.dir = saved_t;
 								s.dir = saved;
 								saved = ND;
+								saved_t = ND;
 							}	
 							else {
 								saved = s.dir;
+								saved_t = t.dir;
+								t.dir = ND;
 								s.dir = ND;
 							}
 							break;
@@ -149,8 +181,17 @@ int main(int argc, char *argv[]) {
 							Running = 1;
 							score = 0;
 							DestroySnake(&s);
+							DestroySnake(&t);
 							initsnake(&s);
+							initsnake(&t);
 							addnode(&s);
+							if(tflag) {
+								addnode(&t);
+								s.head->x = INITIALX_TWOPLAYER_SNAKE_s;
+								s.head->y = INITIALY_TWOPLAYER_SNAKE_s;
+								t.head->x = INITIALX_TWOPLAYER_SNAKE_t;
+								t.head->y = INITIALY_TWOPLAYER_SNAKE_t;
+							}
 							break;	
 						default:
 							break;		
@@ -161,10 +202,8 @@ int main(int argc, char *argv[]) {
 			if(e.type == SDL_KEYDOWN)
 				break;
 		} 	
-		AD_DrawSnake(&ren, &s, co, score);		//to update borad conditions (frontend)			
-		SnakeCollisionTest(&s);
-		AD_DrawSnake(&ren, &s, co, score);		//callled twice for better animation
-		switch(CheckGame(&s, co)) {
+		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//to update board conditions (frontend)	
+		switch(CheckGame(&s, &t, co, tflag)) {
 			case SNAKE_FOOD_SMALL:
 				if(score >= LV4 && Running == 4) {
 					s.speed *= 2;
@@ -212,9 +251,10 @@ int main(int argc, char *argv[]) {
 				break;
 			case SNAKE_HALTED:
 				break;	
-		}				/*checks the collision of snake with walls	*
-						 *and with snake or meals to			*
-						 *snake and takes appropriate action accordingly*/		 
+					}				
+/*checks the collision of snake with walls and with snake or meals to snake and takes appropriate action
+  accordingly*/		
+		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//callled twice for better animation
 	}
 	UpdateHighscore(score * 10, tflag);
 	num == 1 ? printf("\tGame score : %ld\n", score * 10) : printf("\tGame %d score : %ld\n", num, score * 10);	

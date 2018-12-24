@@ -39,7 +39,7 @@ extern TTF_Font *arial;
 extern SDL_Rect R1;
 extern SDL_Color white;
 
-void AD_DrawSnake(SDL_Renderer **ren, snake *s, struct XY co, long int score) {
+void AD_DrawSnake(SDL_Renderer **ren, snake *s, snake *t, struct XY co, long int score, int tflag) {
 	if(s->dir == ND)
 		return;
 	SDL_Surface *sur;

@@ -172,21 +172,58 @@ struct XY RandomBall(snake *s) {
 	return ret;
 }
 
-int collision = 0;
-
-State CheckGame(snake *s, struct XY co) {
+State CheckGame(snake *s, snake *t, struct XY co, int tflag) {
 	if(s->dir == ND)
 		return SNAKE_HALTED;
-	if(collision == 1)
-		return SNAKE_COLLISION_SNAKE;
-	if((s->head->x <= 8 || s->head->x >= 792 || s->head->y <= 8 || s->head->y >= 792))
-		return SNAKE_COLLISION_WALL;
-	if((s->head->x == co.x && s->head->y == co.y - BLOCKSIZE) || (s->head->x == co.x - BLOCKSIZE && s->head->y == co.y)) {
-		if(co.t == SMALL)
-			return SNAKE_FOOD_SMALL;
-		else 
-			return SNAKE_FOOD_LARGE;		
+	switch(SnakeCollisionTest(s, t, tflag)) {
+		case 0:
+			break;
+		case 1:
+			return SNAKE_COLLISION_SNAKE;
+			break;
+		case 2:
+			return SNAKE_COLLISION_SNAKE_s;
+			break;
+		case 3:
+			return SNAKE_t_COLLISION_SNAKE_s;
+			break;
+		case 4:
+			return SNAKE_s_COLLISION_SNAKE_t;
+			break;
+		case 5:
+			return SNAKE_COLLISION_SNAKE_t;
+			break;
+		default:
+			break;			
 	}	
+	if(!tflag) {
+		if((s->head->x <= 8 || s->head->x >= 792 || s->head->y <= 8 || s->head->y >= 792))
+			return SNAKE_COLLISION_WALL;
+		if((s->head->x == co.x && s->head->y == co.y) || (s->head->x == co.x && s->head->y == co.y)) {
+			if(co.t == SMALL)
+				return SNAKE_FOOD_SMALL;
+			else 
+				return SNAKE_FOOD_LARGE;		
+		}
+	}
+	else {
+		if((s->head->x <= 8 || s->head->x >= 792 || s->head->y <= 8 || s->head->y >= 792))
+			return SNAKE_COLLISION_WALL;
+		if((s->head->x == co.x && s->head->y == co.y - BLOCKSIZE) || (s->head->x == co.x - BLOCKSIZE && s->head->y == co.y)) {
+			if(co.t == SMALL)
+				return SNAKE_FOOD_SMALL_s;
+			else 
+				return SNAKE_FOOD_LARGE_s;		
+		}
+		if((t->head->x <= 8 || t->head->x >= 792 || t->head->y <= 8 || t->head->y >= 792))
+			return SNAKE_COLLISION_WALL;
+		if((t->head->x == co.x && t->head->y == co.y - BLOCKSIZE) || (t->head->x == co.x - BLOCKSIZE && t->head->y == co.y)) {
+			if(co.t == SMALL)
+				return SNAKE_FOOD_SMALL_t;
+			else 
+				return SNAKE_FOOD_LARGE_t;		
+		}
+	}		
 	return SNAKE_PROPAGATING;	
 }
 
@@ -204,22 +241,51 @@ void DestroyAllNodes(node *n) {
 	free(n);	
 }
 
-void SnakeCollisionTest(snake *s) {
+int SnakeCollisionTest(snake *s, snake *t, int tflag) {
 	static int i = 1;
-	if(i) {
-		node *n = s->head->next;
-		if(n) {
-			n = n->next;
-			int x = s->head->x, y = s->head->y;
+	if(!tflag) {
+		if(i) {
+			node *n = s->head->next;
+			if(n) {
+				n = n->next;
+				int x = s->head->x, y = s->head->y;
+				while(n) {
+					if(n->x == x && n->y == y) {
+						i = 0;
+						return 1;
+					}	
+					n = n->next;
+				}
+			}
+		}
+	}
+	else {
+		if(i) {
+			node *n = s->head->next, *m = t->head->next;
+			int x = s->head->x, y = s->head->y, xt = t->head->x, yt = t->head->y;
 			while(n) {
 				if(n->x == x && n->y == y) {
 					i = 0;
-					collision = 1;
-					return;
-				}	
+					return 2;			//snake s collided with itself
+				}
+				if(n->x == xt && n->y == yt) {
+					i = 0;
+					return 3;			//snake t collided with snake s 	
+				}
 				n = n->next;
 			}
+			while(m) {
+				if(m->x == x && m->y == y) {
+					i = 0;
+					return 4;			//snake s collided with snake t
+				}	
+				if(m->x == xt && m->y == yt) {
+					i = 0;
+					return 5;			//snake t collided with itself
+				}
+			}
 		}
-	}	
+	}
+	return 0;		
 }
 
