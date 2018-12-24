@@ -62,7 +62,7 @@ void UpdateBoardStatus(snake *s);
 void AD_DrawSnake(SDL_Renderer **ren, snake *s, snake *t, struct XY co, long int score, int tflag);
 void AD_DrawCircle(SDL_Renderer **ren, float center_x_coordinate, float center_y_coordinate, float radius, int r, int g, int b, int a);
 int Random(int Range_Start, int Range_End);
-struct XY RandomBall(snake *s);
+struct XY RandomBall(snake *s, snake *t, int tflag);
 State CheckGame(snake *s, snake *t, struct XY co, int tflag);
 int SnakeCollisionTest(snake *s, snake *t, int tflag);
 void DestroySnake(snake *s);

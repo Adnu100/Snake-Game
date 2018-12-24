@@ -148,11 +148,12 @@ void addnode(snake *s) {
 	s->tail = n;
 }
 
-struct XY RandomBall(snake *s) {
+struct XY RandomBall(snake *s, snake *t, int tflag) {
 	int x, y;
-	node *n;
+	node *n, *m;
 	while(1) {
 		n = s->head;
+		m = t->head;
 		x = Random(1, 800 / (2 * BLOCKSIZE) - 1);
 		y = Random(2, 800 / (2 * BLOCKSIZE) - 1);
 		x *= (BLOCKSIZE * 2);
@@ -162,7 +163,16 @@ struct XY RandomBall(snake *s) {
 				break;
 			n = n->next;	
 		}
-		if(!n)
+		if(tflag) {
+			while(m) {
+				if(m->x == x && m->y == y)
+					break;
+				m = m->next;	
+			}
+		}
+		else 
+			m = NULL;	
+		if(!(n || m))
 			break;
 	}
 	struct XY ret;

@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 					}	
 					if(s.dir == ND && saved == ND) {
 						score = 0;
-						co = RandomBall(&s);
+						co = RandomBall(&s, &t, tflag);
 					}		
 					switch(e.key.keysym.sym) {
 						case SDLK_UP:
@@ -204,46 +204,124 @@ int main(int argc, char *argv[]) {
 		} 	
 		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//to update board conditions (frontend)	
 		switch(CheckGame(&s, &t, co, tflag)) {
-			case SNAKE_FOOD_SMALL:
+			case SNAKE_FOOD_SMALL: case SNAKE_FOOD_SMALL_s: 
 				if(score >= LV4 && Running == 4) {
 					s.speed *= 2;
+					t.speed *= 2;
 					Running = 5;
 				}
 				else if(score >= LV3 && Running == 3) {
 					s.speed *= 2;
+					t.speed *= 2;
 					Running = 4;	
 				}
 				else if(score >= LV2 && Running == 2) {
-					s.speed *= 2;	
+					s.speed *= 2;
+					t.speed *= 2;	
 					Running = 3;
 				}
 				else if(score >= LV1 && Running == 1) {
 					s.speed *= 2;
+					t.speed *= 2;
 					Running = 2;
 				}	
 				score += (s.speed * 5);
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
-				co = RandomBall(&s);
+				co = RandomBall(&s, &t, tflag);
 				break;
-			case SNAKE_FOOD_LARGE:
+			case SNAKE_FOOD_SMALL_t:
+				if(score >= LV4 && Running == 4) {
+					s.speed *= 2;
+					t.speed *= 2;
+					Running = 5;
+				}
+				else if(score >= LV3 && Running == 3) {
+					s.speed *= 2;
+					t.speed *= 2;
+					Running = 4;	
+				}
+				else if(score >= LV2 && Running == 2) {
+					s.speed *= 2;
+					t.speed *= 2;	
+					Running = 3;
+				}
+				else if(score >= LV1 && Running == 1) {
+					s.speed *= 2;
+					t.speed *= 2;
+					Running = 2;
+				}	
+				score += (s.speed * 5);
+				addnode(&t);
+				addnode(&t);
+				addnode(&t);
+				co = RandomBall(&s, &t, tflag);
+				break;	
+			case SNAKE_FOOD_LARGE: case SNAKE_FOOD_LARGE_s:
 				score += (s.speed * 25);
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
 				addnode(&s);
-				co = RandomBall(&s);
+				co = RandomBall(&s, &t, tflag);
 				break;
+			case SNAKE_FOOD_LARGE_t:
+				score += (s.speed * 25);
+				addnode(&t);
+				addnode(&t);
+				addnode(&t);
+				addnode(&t);
+				addnode(&t);
+				co = RandomBall(&s, &t, tflag);
+				break;	
 			case SNAKE_COLLISION_WALL:
 				printf("\tUpps!! The snake collided with the walls!!\n");
 				s.dir = ND;
+				t.dir = ND;
 				Running = -1;
 				break;
+			case SNAKE_s_COLLISION_WALL:
+				printf("\tUpps!! The red collided with the walls");	
+				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;
+			case SNAKE_t_COLLISION_WALL:
+				printf("\tUpps!! The blue collided with the walls");	
+				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;	
 			case SNAKE_COLLISION_SNAKE:
 				printf("\tUpps!! The snake collided with itself!!\n");
 				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;
+			case SNAKE_COLLISION_SNAKE_s:
+				printf("\tUpps!! The red collided with itself!!\n");
+				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;
+			case SNAKE_COLLISION_SNAKE_t:
+				printf("\tUpps!! The blue collided with itself!!\n");
+				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;
+			case SNAKE_s_COLLISION_SNAKE_t:
+				printf("\tUpps!! The red collided with the blue!!\n");
+				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;
+			case SNAKE_t_COLLISION_SNAKE_s:
+				printf("\tUpps!! The blue collided with the red!!\n");
+				s.dir = ND;
+				t.dir = ND;
 				Running = -1;
 				break;
 			case SNAKE_PROPAGATING:
