@@ -334,8 +334,9 @@ int main(int argc, char *argv[]) {
   accordingly*/		
 		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//callled twice for better animation
 	}
-	UpdateHighscore(score * 10, tflag);
 	num == 1 ? printf("\tGame score : %ld\n", score * 10) : printf("\tGame %d score : %ld\n", num, score * 10);	
+	if((score * 10) == UpdateHighscore(score * 10, tflag))
+		printf("\tNew Highscore!\n");
 	Display_highscore();
 	TTF_CloseFont(arial);
 	TTF_Quit();

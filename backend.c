@@ -41,7 +41,7 @@ long int UpdateHighscore(long int score, int tflag) {
 	long int sscore, tscore, retscore;
 	fd = open(".snake", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 	if(fd == -1) {
-		fprintf(stderr, "Could not find help.txt\n");
+		fprintf(stderr, "Could not find .snake (highscores file)\n");
 		return -1;
 	}
 	read(fd, &sscore, sizeof(long int));
@@ -49,15 +49,15 @@ long int UpdateHighscore(long int score, int tflag) {
 	lseek(fd, SEEK_SET, 0);
 	if(tflag) {
 		retscore = tscore;
-		if(score > retscore)
+		if(score > retscore) {
+			lseek(fd, sizeof(long int), SEEK_SET);
 			write(fd, &score, sizeof(long int));
+		}	
 	}		
 	else { 	
 		retscore = sscore;	
-		if(score > retscore) {
-			lseek(fd, SEEK_SET, sizeof(long int));
+		if(score > retscore)
 			write(fd, &score, sizeof(long int));
-		}
 	}	
 	return (score > retscore ? score : retscore);
 }
