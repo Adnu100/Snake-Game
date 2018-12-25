@@ -109,6 +109,7 @@ int main(int argc, char *argv[]) {
 					}	
 					if(s.dir == ND && saved == ND) {
 						score = 0;
+						t.dir = UP;
 						co = RandomBall(&s, &t, tflag);
 					}		
 					switch(e.key.keysym.sym) {
@@ -329,7 +330,7 @@ int main(int argc, char *argv[]) {
 				break;
 			case SNAKE_HALTED:
 				break;	
-					}				
+		}				
 /*checks the collision of snake with walls and with snake or meals to snake and takes appropriate action
   accordingly*/		
 		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//callled twice for better animation

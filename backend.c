@@ -219,7 +219,7 @@ State CheckGame(snake *s, snake *t, struct XY co, int tflag) {
 	else {
 		if((s->head->x <= 8 || s->head->x >= 792 || s->head->y <= 8 || s->head->y >= 792))
 			return SNAKE_COLLISION_WALL;
-		if((s->head->x == co.x && s->head->y == co.y - BLOCKSIZE) || (s->head->x == co.x - BLOCKSIZE && s->head->y == co.y)) {
+		if((s->head->x == co.x && s->head->y == co.y) || (s->head->x == co.x && s->head->y == co.y)) {
 			if(co.t == SMALL)
 				return SNAKE_FOOD_SMALL_s;
 			else 
@@ -227,7 +227,7 @@ State CheckGame(snake *s, snake *t, struct XY co, int tflag) {
 		}
 		if((t->head->x <= 8 || t->head->x >= 792 || t->head->y <= 8 || t->head->y >= 792))
 			return SNAKE_COLLISION_WALL;
-		if((t->head->x == co.x && t->head->y == co.y - BLOCKSIZE) || (t->head->x == co.x - BLOCKSIZE && t->head->y == co.y)) {
+		if((t->head->x == co.x && t->head->y == co.y) || (t->head->x == co.x && t->head->y == co.y)) {
 			if(co.t == SMALL)
 				return SNAKE_FOOD_SMALL_t;
 			else 
