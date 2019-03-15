@@ -29,6 +29,7 @@ typedef enum SNAKE_State {
 	SNAKE_COLLISION_SNAKE_t,				//snake t collided with itself
 	SNAKE_s_COLLISION_SNAKE_t,				//snake s collided with snake t
 	SNAKE_t_COLLISION_SNAKE_s,				//snake t collided with snake s
+	HEAD_TO_HEAD_COLLISION,					//head to head collision of two snakes
 	SNAKE_PROPAGATING,					//no event
 	SNAKE_HALTED						//game paused, not started, etc
 } State;							//the states of the snake

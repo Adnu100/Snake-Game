@@ -203,6 +203,9 @@ State CheckGame(snake *s, snake *t, struct XY co, int tflag) {
 		case 5:
 			return SNAKE_COLLISION_SNAKE_t;
 			break;
+		case 6:
+			return HEAD_TO_HEAD_COLLISION;
+			break;	
 		default:
 			break;			
 	}	
@@ -295,6 +298,8 @@ int SnakeCollisionTest(snake *s, snake *t, int tflag) {
 				}
 				m = m->next;
 			}
+			if(s->head == t->head)
+				return 6;				//head to head collision
 		}
 	}
 	return 0;		

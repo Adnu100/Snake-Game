@@ -374,6 +374,12 @@ int main(int argc, char *argv[]) {
 				t.dir = ND;
 				Running = -1;
 				break;
+			case HEAD_TO_HEAD_COLLISION:
+				printf("\tUpps!! The snakes collided head to head!!\n");
+				s.dir = ND;
+				t.dir = ND;
+				Running = -1;
+				break;	
 			case SNAKE_PROPAGATING:
 				score += (s.speed * 0.5);	
 				break;
