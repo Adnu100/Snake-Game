@@ -110,56 +110,105 @@ int main(int argc, char *argv[]) {
 					if(s.dir == ND && saved == ND) {
 						score = 0;
 						t.dir = UP;
+						s.dir = UP;
 						co = RandomBall(&s, &t, tflag);
 					}		
 					switch(e.key.keysym.sym) {
 						case SDLK_UP:
-							if(s.dir != DOWN && saved != DOWN) {
-								s.dir = UP;
-								saved = ND;
+							if(saved != ND) {
+								if(saved != DOWN) {
+									s.dir = UP;
+									saved = ND;
+									t.dir = saved_t;
+									saved_t = ND;
+								}	
 							}	
+							else
+								s.dir = UP;
 							break;
 						case SDLK_DOWN:
-							if(s.dir != UP && saved != UP) {
-								s.dir = DOWN;
-								saved = ND;
-							}	
+							if(saved != ND) {
+								if(saved != UP) {
+									s.dir = DOWN;
+									saved = ND;
+									t.dir = saved_t;
+									saved_t = ND;
+								}	
+							}
+							else 
+								s.dir = DOWN;	
 							break;
 						case SDLK_RIGHT:
-							if(s.dir != LEFT && saved != LEFT) {
-								s.dir = RIGHT;
-								saved = ND;
-							}	
+							if(saved != ND) {
+								if(saved != LEFT) {
+									s.dir = RIGHT;
+									saved = ND;
+									t.dir = saved_t;
+									saved_t = ND;
+								}	
+							}
+							else 
+								s.dir = RIGHT;	
 							break;
 						case SDLK_LEFT:
-							if(s.dir != RIGHT && saved != RIGHT) {
-								s.dir = LEFT;
-								saved = ND;
+							if(saved != ND) {
+								if(saved != RIGHT) {
+									s.dir = LEFT;
+									saved = ND;
+									t.dir = saved_t;
+									saved_t = ND;
+								}	
 							}	
+							else
+								s.dir = LEFT;
 							break;
 						case SDLK_w:
-							if(t.dir != DOWN && saved_t != DOWN) {
-								t.dir = UP;
-								saved_t = ND;
+							if(saved_t != ND) {
+								if(saved_t != DOWN) {
+									t.dir = UP;
+									saved_t = ND;
+									s.dir = saved;
+									saved = ND;
+								}	
 							}	
+							else
+								t.dir = UP;	
 							break;
 						case SDLK_s:
-							if(t.dir != UP && saved_t != UP) {
-								t.dir = DOWN;
-								saved_t = ND;
+							if(saved_t != ND) {
+								if(saved_t != UP) {
+									t.dir = DOWN;
+									saved_t = ND;
+									s.dir = saved;
+									saved = ND;
+								}	
 							}	
+							else
+								t.dir = DOWN;	
 							break;
 						case SDLK_d:
-							if(t.dir != LEFT && saved_t != LEFT) {
-								t.dir = RIGHT;
-								saved_t = ND;
+							if(saved_t != ND) {
+								if(saved_t != LEFT) {
+									t.dir = RIGHT;
+									saved_t = ND;
+									s.dir = saved;
+									saved = ND;
+								}	
 							}	
+							else
+								t.dir = RIGHT;	
 							break;
 						case SDLK_a:
-							if(t.dir != RIGHT && saved_t != RIGHT) {
-								t.dir = LEFT;
-								saved_t = ND;
+							if(saved_t != ND) {
+								if(saved_t != RIGHT) {
+									t.dir = LEFT;
+									saved_t = ND;
+									s.dir = saved;
+									saved = ND;
+								}	
 							}	
+							else
+								t.dir = LEFT;		
 							break;	
 						case SDLK_SPACE: case SDLK_KP_ENTER: case SDLK_p: case SDLK_RETURN:
 							if(s.dir == ND) {
@@ -202,7 +251,7 @@ int main(int argc, char *argv[]) {
 			}
 			if(e.type == SDL_KEYDOWN)
 				break;
-		} 	
+		} 
 		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//to update board conditions (frontend)	
 		switch(CheckGame(&s, &t, co, tflag)) {
 			case SNAKE_FOOD_SMALL: case SNAKE_FOOD_SMALL_s: 
@@ -332,8 +381,8 @@ int main(int argc, char *argv[]) {
 				break;	
 		}				
 /*checks the collision of snake with walls and with snake or meals to snake and takes appropriate action
-  accordingly*/		
-		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//callled twice for better animation
+  accordingly*/	
+  		AD_DrawSnake(&ren, &s, &t, co, score, tflag);		//callled twice for better animation
 	}
 	num == 1 ? printf("\tGame score : %ld\n", score * 10) : printf("\tGame %d score : %ld\n", num, score * 10);	
 	if((score * 10) == UpdateHighscore(score * 10, tflag))

@@ -293,6 +293,7 @@ int SnakeCollisionTest(snake *s, snake *t, int tflag) {
 					i = 0;
 					return 5;			//snake t collided with itself
 				}
+				m = m->next;
 			}
 		}
 	}
