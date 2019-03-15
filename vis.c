@@ -130,7 +130,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, snake *t, struct XY co, long int
 				}
 				n = n->prev;
 			}
-			AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 255, 0, 0, 0);
+			AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 0, 0, 255, 0);
 			switch(t->head->dir) {
 				case UP:
 					t->head->y -= t->speed;
@@ -154,7 +154,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, snake *t, struct XY co, long int
 		if(co.t == BIG) 
 			AD_DrawCircle(ren, co.x, co.y, BLOCKSIZE * multiplier, Random(0, 255), Random(0, 255), Random(0, 255), 0);
 		SDL_RenderPresent(*ren);
-		SDL_Delay(1000 / 60);
+		//SDL_Delay(1000 / 60);
 	}
 	SDL_SetRenderDrawColor(*ren, 0, 100, 0, 200);
 	SDL_RenderClear(*ren);
@@ -221,7 +221,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, snake *t, struct XY co, long int
 			}
 			n = n->prev;
 		}
-		AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 255, 0, 0, 0);
+		AD_DrawCircle(ren, n->x, n->y, BLOCKSIZE * 1.5, 0, 0, 255, 0);
 		switch(t->head->dir) {
 			case UP:
 				t->head->y -= BLOCKSIZE % t->speed;
