@@ -108,6 +108,7 @@ void AD_DrawSnake(SDL_Renderer **ren, snake *s, snake *t, struct XY co, long int
 				break;				
 		}
 		if(tflag) {
+			SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0);
 			n = t->tail;
 			while(n != t->head) {
 				DrawSnakeBody(ren, n->x, n->y, SNAKENODE);
