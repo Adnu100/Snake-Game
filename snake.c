@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}	
 							else
-								s.dir = UP;
+								s.dir = (s.dir == DOWN ? DOWN : UP);
 							break;
 						case SDLK_DOWN:
 							if(saved != ND) {
@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}
 							else 
-								s.dir = DOWN;	
+								s.dir = (s.dir == UP ? UP : DOWN);
 							break;
 						case SDLK_RIGHT:
 							if(saved != ND) {
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}
 							else 
-								s.dir = RIGHT;	
+								s.dir = (s.dir == LEFT ? LEFT : RIGHT);	
 							break;
 						case SDLK_LEFT:
 							if(saved != ND) {
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}	
 							else
-								s.dir = LEFT;
+								s.dir = (s.dir == RIGHT ? RIGHT : LEFT);
 							break;
 						case SDLK_w:
 							if(saved_t != ND) {
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}	
 							else
-								t.dir = UP;	
+								t.dir = (t.dir == DOWN ? DOWN : UP);
 							break;
 						case SDLK_s:
 							if(saved_t != ND) {
@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}	
 							else
-								t.dir = DOWN;	
+								t.dir = (t.dir == UP ? UP : DOWN);
 							break;
 						case SDLK_d:
 							if(saved_t != ND) {
@@ -196,7 +196,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}	
 							else
-								t.dir = RIGHT;	
+								t.dir = (t.dir == LEFT ? LEFT : RIGHT);
 							break;
 						case SDLK_a:
 							if(saved_t != ND) {
@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
 								}	
 							}	
 							else
-								t.dir = LEFT;		
+								t.dir = (t.dir == RIGHT ? RIGHT : LEFT);	
 							break;	
 						case SDLK_SPACE: case SDLK_KP_ENTER: case SDLK_p: case SDLK_RETURN:
 							if(s.dir == ND) {
