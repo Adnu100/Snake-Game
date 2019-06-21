@@ -1,5 +1,5 @@
 Snake Game:
-Created y - Adnesh Anil Dhamangaonkar
+Created by - Adnesh Anil Dhamangaonkar
 
 Snake game in which main objective is to collect bonuses appeared
 on the screen by the snake and score highest. As the snake picks 
@@ -32,6 +32,6 @@ Exit Status:
  2 if could not create window,
  3 if could not create renderer, 
  4 if TTF initialization fails,
- 5 if font (.ttf) file is missing (or unable to open)
- 6 if not enough RAM for the game
- 7 if invalid options are provided in command line
+ 5 if font (.ttf) file is missing (or unable to open),
+ 6 if not enough RAM for the game,
+ 7 if invalid options are provided in command line.
