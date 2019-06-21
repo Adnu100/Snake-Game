@@ -6,3 +6,5 @@ v.o: snake.h vis.c
 	cc vis.c -c -Wall -o v.o
 b.o: snake.h backend.c
 	cc backend.c -c -Wall -o b.o
+clean:
+	rm *.o *~ -f

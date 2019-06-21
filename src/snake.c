@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 			fprintf(stderr, "Could not Initiate Fonts : %s\n", TTF_GetError());
 			exit(4);
 	}
-	arial = TTF_OpenFont("font.ttf", 50);
+	arial = TTF_OpenFont("../support/font.ttf", 50);
 	if(arial == NULL) {
 		fprintf(stderr, "Could not find the font loader file : %s\n", TTF_GetError());
 		exit(5);
