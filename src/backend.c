@@ -12,7 +12,7 @@
 void Display_help(void) {
 	int fd;
 	char b;
-	fd = open("../support/snake_help.txt", O_RDONLY);
+	fd = open("support/snake_help.txt", O_RDONLY);
 	if(fd == -1) {
 		fprintf(stderr, "Could not find help.txt\n");
 		return;
@@ -26,7 +26,7 @@ void Display_help(void) {
 void Display_highscore(void) {
 	int fd;
 	long int sscore = 0, tscore = 0;
-	fd = open("../support/snake.score", O_RDONLY);
+	fd = open("support/snake.score", O_RDONLY);
 	if(fd == -1) {
 		printf("\tHighscore (single player): %ld\n\tHighscore (double player): %ld\n", sscore, tscore);
 		return;
@@ -39,7 +39,7 @@ void Display_highscore(void) {
 long int UpdateHighscore(long int score, int tflag) {
 	int fd;
 	long int sscore, tscore, retscore;
-	fd = open("../support/snake.score", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+	fd = open("support/snake.score", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 	if(fd == -1) {
 		fprintf(stderr, "Could not find .snake (highscores file)\n");
 		return -1;
@@ -65,7 +65,7 @@ long int UpdateHighscore(long int score, int tflag) {
 void Display_controls(void) {
 	int fd;
 	char b;
-	fd = open("../support/snake_help.txt", O_RDONLY);
+	fd = open("support/snake_help.txt", O_RDONLY);
 	if(fd == -1) {
 		fprintf(stderr, "Could not find help.txt\n");
 		return;
@@ -81,7 +81,7 @@ void Display_controls(void) {
 
 void Reset_highscore(void) {
 	int fd;
-	fd = open("../support/snake.score", O_WRONLY);
+	fd = open("support/snake.score", O_WRONLY);
 	if(fd == -1)
 		return;
 	long int i = 0;
